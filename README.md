@@ -146,7 +146,7 @@ python test_chat.py
 
 ---
 
-## Assistant Scope
+### Assistant Scope
 
 The Personal Knowledge Brain is designed to:
 
@@ -161,7 +161,7 @@ The assistant is intentionally **not** designed to:
 - Provide speculative or ungrounded responses
 - Perform autonomous actions beyond retrieval and response generation
 
-## Query Processing and Retrieval
+### Query Processing and Retrieval
 
 User queries are processed through a Retrieval-Augmented Generation (RAG) pipeline:
 
@@ -173,6 +173,7 @@ User queries are processed through a Retrieval-Augmented Generation (RAG) pipeli
 
 This design ensures that responses remain explainable, relevant, and resistant to hallucination.
 
+---
 
 ### 🧠 Knowledge vs Conversation Memory
 
