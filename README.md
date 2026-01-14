@@ -217,7 +217,7 @@ This separation ensures accuracy and explainability.
 
 ---
 
-✅ Why This Project Matters
+### ✅ Why This Project Matters
 This project demonstrates:
 
 * Practical understanding of RAG
