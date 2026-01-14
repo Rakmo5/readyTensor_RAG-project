@@ -160,7 +160,7 @@ The assistant is intentionally **not** designed to:
 - Act as a web search engine
 - Provide speculative or ungrounded responses
 - Perform autonomous actions beyond retrieval and response generation
-
+---
 ### Query Processing and Retrieval
 
 User queries are processed through a Retrieval-Augmented Generation (RAG) pipeline:
@@ -200,6 +200,8 @@ This separation ensures accuracy and explainability.
 * Limited document formats (text/markdown)
 
 * Minimal interface (CLI-based)
+
+---
 
 ### 🔮 Future Improvements
 
