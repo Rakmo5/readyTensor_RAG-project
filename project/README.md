@@ -102,3 +102,102 @@ project/
 
 ```
 
+
+---
+
+## 🚀 How to Run
+
+### 1️⃣ Setup environment
+
+```bash
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+### 2️⃣ Environment variables
+
+Create a .env file:
+
+```bash
+GROQ_API_KEY=your_api_key_here
+
+```
+
+### 3️⃣ Add documents
+
+Place .txt or .md files inside:
+
+```bash
+data/users/<your_username>/documents/
+
+```
+
+### 4️⃣ Ingest documents
+
+```bash
+python test_vector_store.py
+```
+
+### 5️⃣ Ask questions
+
+``` bash
+python test_chat.py
+```
+
+---
+
+### 🧠 Knowledge vs Conversation Memory
+
+* Conversation memory
+
+    * Stored automatically in SQLite
+
+    * Used for conversational continuity
+
+* Knowledge base
+
+    * Updated explicitly via user action
+
+    * Prevents accidental or noisy ingestion
+
+This separation ensures accuracy and explainability.
+
+--- 
+
+### ⚠️ Limitations
+
+* Manual document ingestion step
+
+* Limited document formats (text/markdown)
+
+* Minimal interface (CLI-based)
+
+### 🔮 Future Improvements
+
+* Web-based chat interface
+
+* Document upload via UI
+
+* Memory summarization
+
+* Knowledge editing and deletion
+
+* Advanced retrieval strategies
+
+---
+
+✅ Why This Project Matters
+This project demonstrates:
+
+* Practical understanding of RAG
+
+* Persistent memory handling
+
+* User-scoped data isolation
+
+* Clean system design
+
+* Real-world AI assistant architecture
+
+It goes beyond a basic chatbot into a foundational personal AI system.
+
