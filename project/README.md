@@ -146,6 +146,35 @@ python test_chat.py
 
 ---
 
+### Assistant Scope
+
+The Personal Knowledge Brain is designed to:
+
+- Answer questions grounded strictly in user-provided documents
+- Maintain conversational continuity using persistent memory
+- Support user-scoped knowledge isolation
+
+The assistant is intentionally **not** designed to:
+
+- Answer general world-knowledge questions
+- Act as a web search engine
+- Provide speculative or ungrounded responses
+- Perform autonomous actions beyond retrieval and response generation
+---
+### Query Processing and Retrieval
+
+User queries are processed through a Retrieval-Augmented Generation (RAG) pipeline:
+
+1. The user query is received and combined with recent conversational context.
+2. A semantic similarity search is performed against the user’s vector database.
+3. The most relevant document chunks are selected based on embedding similarity.
+4. Retrieved context is injected into the language model prompt.
+5. The language model generates a grounded response using only the provided context.
+
+This design ensures that responses remain explainable, relevant, and resistant to hallucination.
+
+---
+
 ### 🧠 Knowledge vs Conversation Memory
 
 * Conversation memory
@@ -172,6 +201,8 @@ This separation ensures accuracy and explainability.
 
 * Minimal interface (CLI-based)
 
+---
+
 ### 🔮 Future Improvements
 
 * Web-based chat interface
@@ -186,7 +217,7 @@ This separation ensures accuracy and explainability.
 
 ---
 
-✅ Why This Project Matters
+### ✅ Why This Project Matters
 This project demonstrates:
 
 * Practical understanding of RAG
