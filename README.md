@@ -38,7 +38,7 @@ This project demonstrates how to convert an ML-based RAG pipeline into a **scala
 ---
 ## 🏗️ System Architecture
 
-![RAG API Architecture](assets/Architecture.png)
+![RAG API Architecture](assets/Architecture.jpeg)
 
 This diagram shows the end-to-end flow from client request to document ingestion, vector retrieval, and LLM-based answer generation.
 
