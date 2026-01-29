@@ -1,8 +1,8 @@
 import sqlite3
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
-from app.auth import get_user_dir
+from project.app.auth import get_user_dir
 
 
 def get_memory_db(user_id: str) -> sqlite3.Connection:
@@ -44,7 +44,7 @@ def save_message(user_id: str, role: str, content: str):
 
     cursor.execute(
         query,
-        (role, content, datetime.utcnow().isoformat())
+        (role, content, datetime.now(timezone.utc).isoformat())
     )
 
     conn.commit()

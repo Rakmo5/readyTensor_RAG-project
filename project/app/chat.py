@@ -4,17 +4,15 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from app.rag import retrieve_relevant_chunks
-from app.memory import save_message, load_recent_messages
-
-from app.knowledge import append_knowledge
-from app.rag import (
+# FIX: Update imports to use the 'project.' prefix
+from project.app.rag import retrieve_relevant_chunks
+from project.app.memory import save_message, load_recent_messages
+from project.app.knowledge import append_knowledge
+from project.app.rag import (
     load_user_documents,
     chunk_documents,
     embed_and_store_chunks,
 )
-print("KNOWLEDGE MODULE LOADED FROM:", __file__)
-print("KNOWLEDGE DIR CONTENTS:", dir())
 
 load_dotenv()
 
@@ -29,11 +27,7 @@ Be concise and factual.
 """
 
 def build_context(chunks):
-    """
-    Combines retrived chunks into a single context string.
-    """
     context_parts = []
-
     for c in chunks:
         context_parts.append(
             f"source:{c['metadata']['source']}\n{c['content']}"
@@ -41,13 +35,6 @@ def build_context(chunks):
     return "\n\n".join(context_parts)
 
 def answer_question(user_id: str, question: str):
-    """
-    Conversational RAG:
-    - includes recent chat history
-    - retrieves relevant knowledge
-    - generates grounded response
-    """
-
     # 1. Load recent conversation (memory)
     history = load_recent_messages(user_id, limit=6)
 
@@ -57,10 +44,8 @@ def answer_question(user_id: str, question: str):
 
     if question.lower().startswith("/add"):
         new_info = question[4:].strip()
-
         append_knowledge(user_id, new_info)
 
-        # Re-ingest knowledge immediately
         docs = load_user_documents(user_id)
         chunks = chunk_documents(docs)
         embed_and_store_chunks(user_id, chunks)
@@ -76,22 +61,13 @@ def answer_question(user_id: str, question: str):
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(
-            content=f"""
-Conversation so far:
-{history_text}
-
-Knowledge context:
-{context}
-
-User question:
-{question}
-"""
+            content=f"Conversation so far:\n{history_text}\n\nKnowledge context:\n{context}\n\nUser question:\n{question}"
         ),
     ]
 
-    # 4. Call LLM
+    # 4. Call LLM - UPDATED MODEL NAME HERE
     llm = ChatGroq(
-        model="llama-3.1-8b-instant",
+        model="llama-3.1-8b-instant",  # Updated from decommissioned model
         temperature=0.3,
         api_key=os.getenv("GROQ_API_KEY"),
     )

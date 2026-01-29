@@ -1,0 +1,6 @@
+Internship Project Overview:
+The official deadline for the RAG-based QA system project is this coming Friday at 5:00 PM. 
+The lead supervisor for this project is Alex, who specializes in API development.
+The system uses FastAPI for the backend and ChromaDB as the local vector store.
+If there are any technical issues, students should contact the IT support desk.
+The project's goal is to demonstrate a functional Retrieval-Augmented Generation pipeline.

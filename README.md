@@ -1,234 +1,221 @@
-# 🧠 Personal Knowledge Brain (PKB)
+# 🚀 Multi-User Conversational RAG API
 
-A user-scoped Retrieval-Augmented Generation (RAG) assistant that answers questions grounded in a user’s own documents, with persistent memory and clean modular design.
+A production-style **Retrieval-Augmented Generation (RAG) backend API** built with **FastAPI, LangChain, ChromaDB, and Groq LLM**.  
+The system allows multiple users to upload documents, maintain private knowledge bases, and receive **context-aware answers with persistent memory**.
 
----
-
-## 📌 Project Overview
-
-Personal Knowledge Brain (PKB) is an AI assistant that allows users to:
-
-- Add their own documents
-- Ask questions grounded strictly in those documents
-- Maintain conversational memory across sessions
-- Keep each user’s data fully isolated
-
-Unlike generic chatbots, PKB is designed as a **personal knowledge system**, not a stateless Q&A tool.
+This project demonstrates how to convert an ML-based RAG pipeline into a **scalable API service** with proper backend engineering practices.
 
 ---
 
 ## ✨ Key Features
 
-- 🔍 Retrieval-Augmented Generation (RAG)
-- 📚 Document ingestion and chunking
-- 🧠 Semantic search using embeddings
-- 💾 Persistent vector database (ChromaDB)
-- 🗂️ Persistent conversation memory (SQLite)
-- 👤 User-scoped isolation (multi-tenant ready)
-- ⚙️ Modular and extensible architecture
+- 🧠 **Conversational RAG**  
+  Uses **Llama-3.1-8B-Instant via Groq API** for fast and accurate responses.
+
+- 📂 **Multi-User Data Isolation**  
+  Each user has a private directory for:
+  - Uploaded documents
+  - Vector database
+  - Chat history (SQLite)
+
+- ⚡ **Background Document Ingestion**  
+  File uploads trigger background embedding and indexing using FastAPI BackgroundTasks.
+
+- 🔎 **Hybrid Retrieval**  
+  Combines:
+  - Vector similarity search from documents
+  - Recent conversational memory from SQLite
+
+- 🛡️ **API Hardening**
+  - In-memory rate limiting (5 requests/minute)
+  - Structured request validation using Pydantic
+  - Graceful error handling for LLM and DB failures
+
+- 📊 **Simple Metrics**
+  - Retrieval count
+  - Response latency per request
 
 ---
 
-## 🧱 Architecture Overview
+## 🏗️ Tech Stack
+
+| Component        | Technology |
+|--------|------------|
+| Backend Framework | FastAPI |
+| LLM Provider | Groq Cloud API |
+| Model | Llama-3.1-8B-Instant |
+| Orchestration | LangChain |
+| Vector DB | ChromaDB (persistent local storage) |
+| Embeddings | Sentence-Transformers (all-MiniLM-L6-v2) |
+| Memory Store | SQLite |
+| Validation | Pydantic |
+| Python Version | 3.10+ |
+
+---
+
+## 📁 Project Structure
+
 ```bash
-User
-└── Query
-├── Conversation Memory (SQLite)
-├── Knowledge Retrieval (ChromaDB)
-└── LLM (Groq)
-```
-
-Each user has an isolated data directory:
-
-```bash
-data/users/<user_id>/
-├── chat.db # conversation memory
-├── documents/ # user-provided documents
-└── vector_db/ # vector embeddings (ChromaDB)   
-```
-
-
----
-
-## 🔁 RAG Pipeline
-
-1. **Document Loading**
-   - User places `.txt` or `.md` files in their documents folder
-
-2. **Chunking**
-   - Documents are split into overlapping chunks
-
-3. **Embedding**
-   - Sentence Transformers (`all-MiniLM-L6-v2`)
-
-4. **Vector Storage**
-   - Persistent ChromaDB collection (per user)
-
-5. **Retrieval**
-   - Semantic similarity search (top-k chunks)
-
-6. **Answer Generation**
-   - Retrieved context + user query → LLM (Groq)
-
----
-
-## 🛠️ Tech Stack
-
-- Python 3
-- ChromaDB
-- Sentence Transformers
-- Groq LLM API
-- SQLite
-
----
-
-## 📂 Project Structure
-
-``` bash
-
 project/
-├── app/
-│ ├── auth.py # user isolation
-│ ├── memory.py # SQLite conversation memory
-│ ├── rag.py # ingestion and retrieval
-│ ├── chat.py # conversational RAG logic
-│ └── knowledge.py # explicit knowledge updates
+├── api/
+│ ├── main.py # FastAPI app entry point
+│ ├── routes.py # /upload and /ask endpoints
+│ ├── schemas.py # Pydantic request/response models
+│ └── rate_limit.py # In-memory rate limiting
+│
+├── app/ # Core RAG logic (reused from certified project)
+│ ├── rag.py
+│ ├── memory.py
+│ ├── knowledge.py
+│ └── auth.py
+│
+├── ingestion/
+│ ├── loader.py # PDF/TXT loaders and chunking
+│ └── background.py # Background ingestion jobs
+│
 ├── data/
-│ └── users/
-├── test_chat.py
-├── test_vector_store.py
-├── requirements.txt
-└── README.md
-
+│ ├── uploads/ # Uploaded documents
+│ └── users/ # Per-user vector DB and SQLite memory
+│
+├── tests/
+├── archive/ # Legacy UI (not used)
+├── README.md
+└── requirements.txt
 ```
-
 
 ---
 
-## 🚀 How to Run
 
-### 1️⃣ Setup environment
+## ⚙️ Setup & Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Rakmo5/readyTensor_RAG-project.git
+cd readyTensor_RAG-project
+git checkout internship-rag-api
+```
+### 2. Create Virtual Environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+source venv/bin/activate      # Linux/Mac
+venv\Scripts\activate         # Windows
+```
+
+### 3. Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
-### 2️⃣ Environment variables
+Pinned versions are used for Chroma compatibility.
 
-Create a .env file:
+### 4. Environment Variables
 
-```bash
-GROQ_API_KEY=your_api_key_here
-
-```
-
-### 3️⃣ Add documents
-
-Place .txt or .md files inside:
+Create a .env file in the project folder:
 
 ```bash
-data/users/<your_username>/documents/
-
+GROQ_API_KEY=your_groq_api_key_here
+HF_TOKEN=your_huggingface_token_here
 ```
-
-### 4️⃣ Ingest documents
-
+### 5. Run the Server
 ```bash
-python test_vector_store.py
+uvicorn project.api.main:app --reload
 ```
 
-### 5️⃣ Ask questions
+Open in browser:
 
-``` bash
-python test_chat.py
+- ✅ Health check: http://127.0.0.1:8000/health
+- 📘 API Docs: http://127.0.0.1:8000/docs
+
+---
+
+## 🧪 API Usage
+
+### ✅ Upload Documents
+
+Endpoint: POST /upload
+Form-Data:
+- file: PDF or TXT
+- user_id: string
+Starts background ingestion and embedding.
+
+Response:
+```bash 
+{"message": "Ingestion started"}
 ```
 
----
+### ✅ Ask Questions (RAG)
+Endpoint: Post /ask
+```bash
+{
+  "question": "What is mentioned about deadlines?",
+  "user_id": "intern_01",
+  "top_k": 3
+}
 
-### Assistant Scope
+```
 
-The Personal Knowledge Brain is designed to:
+Response:
+```bash
+{
+  "question": "What is mentioned about deadlines?",
+  "user_id": "intern_01",
+  "top_k": 3
+}
+```
 
-- Answer questions grounded strictly in user-provided documents
-- Maintain conversational continuity using persistent memory
-- Support user-scoped knowledge isolation
-
-The assistant is intentionally **not** designed to:
-
-- Answer general world-knowledge questions
-- Act as a web search engine
-- Provide speculative or ungrounded responses
-- Perform autonomous actions beyond retrieval and response generation
----
-### Query Processing and Retrieval
-
-User queries are processed through a Retrieval-Augmented Generation (RAG) pipeline:
-
-1. The user query is received and combined with recent conversational context.
-2. A semantic similarity search is performed against the user’s vector database.
-3. The most relevant document chunks are selected based on embedding similarity.
-4. Retrieved context is injected into the language model prompt.
-5. The language model generates a grounded response using only the provided context.
-
-This design ensures that responses remain explainable, relevant, and resistant to hallucination.
-
----
-
-### 🧠 Knowledge vs Conversation Memory
-
-* Conversation memory
-
-    * Stored automatically in SQLite
-
-    * Used for conversational continuity
-
-* Knowledge base
-
-    * Updated explicitly via user action
-
-    * Prevents accidental or noisy ingestion
-
-This separation ensures accuracy and explainability.
-
---- 
-
-### ⚠️ Limitations
-
-* Manual document ingestion step
-
-* Limited document formats (text/markdown)
-
-* Minimal interface (CLI-based)
+### ✅ Add Knowledge via Chat
+Users can dynamically add knowledge:
+```bash
+{
+  "question": "/add The supervisor is Alex.",
+  "user_id": "intern_01"
+}
+```
+The system stores this in the user's knowledge base and memory.
 
 ---
 
-### 🔮 Future Improvements
+## 🛡️ Security & Reliability
 
-* Web-based chat interface
-
-* Document upload via UI
-
-* Memory summarization
-
-* Knowledge editing and deletion
-
-* Advanced retrieval strategies
+- Rate Limiting
+   - 5 requests per minute per IP (in-memory)
+- Failure Handling
+   - LLM API failures → HTTP 503
+   - Vector DB issues → HTTP 500
+   - Rate limit exceeded → HTTP 429
+- Request Validation
+   - Enforced using Pydantic schemas
 
 ---
 
-### ✅ Why This Project Matters
+## 🎯 Design Goals
+
+This internship version focuses on:
+- Clean API design
+- Separation of concerns
+- Background processing
+- Production-style validation and monitoring
+
+The system is intentionally scoped to backend engineering and explainable AI pipelines.
+
+---
+
+## 🧠 Learning Outcomes
+
 This project demonstrates:
+- Converting ML pipelines into API services
+- RAG system design with persistent memory
+- Vector database integration
+- Async and background task handling
+- Production-oriented API hardening
 
-* Practical understanding of RAG
+---
+## 📌 Notes
 
-* Persistent memory handling
+- The certified ReadyTensor project remains unchanged on main branch.
 
-* User-scoped data isolation
+- Internship implementation is developed on internship-rag-api branch.
 
-* Clean system design
-
-* Real-world AI assistant architecture
-
-It goes beyond a basic chatbot into a foundational personal AI system.
-
+- UI is intentionally excluded to focus on backend evaluation.
