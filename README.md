@@ -36,9 +36,15 @@ This project demonstrates how to convert an ML-based RAG pipeline into a **scala
   - Response latency per request
 
 ---
+## 🏗️ System Architecture
+
+![RAG API Architecture](assets/RAG_API_Architecture_Diagram.png)
+
+This diagram shows the end-to-end flow from client request to document ingestion, vector retrieval, and LLM-based answer generation.
+
 
 ## 🏗️ Tech Stack
-
+```bash
 | Component        | Technology |
 |--------|------------|
 | Backend Framework | FastAPI |
@@ -50,7 +56,7 @@ This project demonstrates how to convert an ML-based RAG pipeline into a **scala
 | Memory Store | SQLite |
 | Validation | Pydantic |
 | Python Version | 3.10+ |
-
+```
 ---
 
 ## 📁 Project Structure
